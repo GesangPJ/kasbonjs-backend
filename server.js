@@ -124,7 +124,7 @@ console.log = function (message) {
 
 // Menentukan izin akses ke server API
 const corsOptions = {
-  origin: allowedOrigins,
+  origin: 'https://kasbon-js.vercel.app',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   preflightContinue: PREFLIGHT,
@@ -132,6 +132,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
+
 
 // CSRF Token Generator
 function generateCSRFToken() {
