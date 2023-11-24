@@ -124,7 +124,7 @@ console.log = function (message) {
 
 // Menentukan izin akses ke server API
 const corsOptions = {
-  origin: '*',
+  origin: allowedOrigins,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   preflightContinue: PREFLIGHT,
