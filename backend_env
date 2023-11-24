@@ -1,0 +1,9 @@
+DB_USER=postgres
+DB_HOST=localhost
+DB_DATABASE=kasbondev
+DB_PASSWORD=gesangpj01
+DB_PORT=5432
+PORT =3001
+CORS_ORIGINS=http://frontend:3000,http://localhost:3000,http://kasbon-nextjs:3000
+PREFLIGHT=true
+API_ACCESS_KEY=
