@@ -22,9 +22,6 @@ const PREFLIGHT = process.env.PREFLIGHT
 
 const logFilePath = path.join(logDirectory, `kasbon-backend-${new Date().toISOString().replace(/[:.]/g, '-')}.log`)
 
-
-
-
 const app = express()
 dotenv.config()
 const server = http.createServer(app)
