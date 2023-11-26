@@ -804,119 +804,119 @@ app.put('/api/edit-bayar-batch', CekAPIKey, async (req, res) => {
 
 // Download Request Kasbon
 app.post('/api/download-request', CekAPIKey, async (req, res) => {
-  const { id_request, nama_user, jumlah, metode, tanggaljam, keterangan } = req.body
-
-  const DateTime = new Date()
+  const { id_request, nama_user, jumlah, metode, tanggaljam, keterangan } = req.body;
+  const DateTime = new Date();
 
   const formatTanggaljam = (tanggaljam) => {
-    const jakartaTimezone = 'Asia/Jakarta'
-    const utcDate = new Date(tanggaljam)
-    const options = { timeZone: jakartaTimezone, hour12: false }
+    const jakartaTimezone = 'Asia/Jakarta';
+    const utcDate = new Date(tanggaljam);
+    const options = { timeZone: jakartaTimezone, hour12: false };
 
-    return utcDate.toLocaleString('id-ID', options)
-  }
+    return utcDate.toLocaleString('id-ID', options);
+  };
+
   try {
+    // Load the template content
     const content = fs.readFileSync(
-      path.resolve(__dirname, "template_request.docx"),
-      "binary"
-    )
+      path.resolve(__dirname, 'template_request.docx'),
+      'binary'
+    );
 
-    const zip = new PizZip(content)
+    // Create a new PizZip object with the template content
+    const zip = new PizZip(content);
 
+    // Create a new Docxtemplater object
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
       linebreaks: true,
-    })
+    });
+
+    // Render the template with data
     doc.render({
-      id_request: id_request,
-      nama_user: nama_user,
-      jumlah: jumlah,
-      metode: metode,
-      keterangan: keterangan,
-      tanggaljam: tanggaljam,
+      id_request,
+      nama_user,
+      jumlah,
+      metode,
+      keterangan,
+      tanggaljam,
       status_q: 'Sukses',
-      current_datetime: formatTanggaljam(DateTime)
-    })
+      current_datetime: formatTanggaljam(DateTime),
+    });
 
+    // Generate the document buffer
     const buffer = doc.getZip().generate({
-      type: "nodebuffer",
-      compression: "DEFLATE",
-    })
+      type: 'nodebuffer',
+      compression: 'DEFLATE',
+    });
 
-    if (buffer) {
-      res.setHeader('Content-Disposition', `attachment filename=kasbon-${nama_user}-${id_request}.docx`)
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-      res.setHeader('Content-Length', buffer.length)
-      res.send(buffer)
-      console.log(`Sukses membuat Docx Request Kasbon ${id_request}`)
+    // Send the document as a response
+    res.setHeader('Content-Disposition', `attachment; filename=kasbon-${nama_user}-${id_request}.docx`);
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    res.setHeader('Content-Length', buffer.length);
+    res.send(buffer);
 
-    } else {
-      res.status(500).send('Internal Server Error')
-      console.log(`Gagal membuat Docx Bukti Kasbon`)
-    }
+    console.log(`Sukses membuat Docx Request Kasbon ${id_request}`);
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+    console.error(`Gagal membuat Docx Request Kasbon`, error);
   }
-  catch (error) {
-    res.status(500).send('Cannot make Docx')
-    console.error(`Gagal membuat Docx Bukti Kasbon`, error)
-  }
-})
+});
 
-// Download Bukti Lunas
+
 app.post('/api/download-lunas', CekAPIKey, async (req, res) => {
   const { id_request, nama_user, jumlah, metode, keterangan, tanggaljam, status_b } = req.body
-
   const DateTime = new Date()
 
   const formatTanggaljam = (tanggaljam) => {
     const jakartaTimezone = 'Asia/Jakarta'
     const utcDate = new Date(tanggaljam)
     const options = { timeZone: jakartaTimezone, hour12: false }
-
     return utcDate.toLocaleString('id-ID', options)
   }
+
   try {
+    // Load the template content
     const content = fs.readFileSync(
-      path.resolve(__dirname, "template_lunas.docx"),
-      "binary"
+      path.resolve(__dirname, 'template_lunas.docx'),
+      'binary'
     )
 
+    // Create a new PizZip object with the template content
     const zip = new PizZip(content)
 
+    // Create a new Docxtemplater object
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
       linebreaks: true,
     })
+
+    // Render the template with data
     doc.render({
-      id_request: id_request,
-      nama_user: nama_user,
-      jumlah: jumlah,
-      metode: metode,
-      keterangan: keterangan,
-      tanggaljam: tanggaljam,
+      id_request,
+      nama_user,
+      jumlah,
+      metode,
+      keterangan,
+      tanggaljam,
       status_b: 'Lunas',
-      current_datetime: formatTanggaljam(DateTime)
+      current_datetime: formatTanggaljam(DateTime),
     })
 
+    // Generate the document buffer
     const buffer = doc.getZip().generate({
-      type: "nodebuffer",
-      compression: "DEFLATE",
+      type: 'nodebuffer',
+      compression: 'DEFLATE',
     })
 
-    if (buffer) {
-      res.setHeader('Content-Disposition', `attachment filename=kasbon-${nama_user}-${id_request}.docx`)
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-      res.setHeader('Content-Length', buffer.length)
-      res.send(buffer)
-      console.log(`Sukses membuat Docx Bukti Lunas ${id_request}`)
+    // Send the document as a response
+    res.setHeader('Content-Disposition', `attachment filename=kasbon-${nama_user}-${id_request}.docx`)
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    res.setHeader('Content-Length', buffer.length)
+    res.send(buffer)
 
-    } else {
-      res.status(500).send('Internal Server Error')
-      console.log(`Gagal membuat Docx Bukti Lunas`)
-      console.error(`Gagal membuat Docx Bukti Lunas`)
-    }
-  }
-  catch (error) {
-    res.status(500).send('Cannot make Docx')
+    console.log(`Sukses membuat Docx Bukti Lunas ${id_request}`)
+  } catch (error) {
+    res.status(500).send('Internal Server Error')
     console.error(`Gagal membuat Docx Bukti Lunas`, error)
   }
 })
