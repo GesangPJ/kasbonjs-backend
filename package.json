@@ -2,7 +2,7 @@
   "name": "kasbon-server",
   "version": "1.7.5",
   "description": "ExpressJS Website manajemen kasbon",
-  "main": "server.js",
+  "main": "index.js",
   "engines": {
     "node": "20.x"
   },
