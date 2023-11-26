@@ -17,7 +17,6 @@ const winston = require('winston')
 const expressWinston = require('express-winston')
 const dayjs = require('dayjs')
 
-const allowedOrigins = process.env.CORS_ORIGINS.split(',')
 const PREFLIGHT = process.env.PREFLIGHT
 
 const logFilePath = path.join(logDirectory, `kasbon-backend-${new Date().toISOString().replace(/[:.]/g, '-')}.log`)
