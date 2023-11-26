@@ -17,4 +17,4 @@ RUN npm install
 EXPOSE 3001
 
 # Define the command to start your Node.js application
-CMD [ "node", "server.js" ]
+CMD [ "node", "index.js" ]
